@@ -10,11 +10,12 @@ More details are on the implementation are included in the `report.pdf`
 
 ## Installation
 
-This project has been implemented in Python `3.12.2`. Use the package manager [pip](https://pip.pypa.io/en/stable/) to run this project.
+This project has been implemented in Python `3.12.2` using Numpy, PyTorch and matplotlib. Use the package manager [pip](https://pip.pypa.io/en/stable/) to run this project.
 
 ```bash
 pip install -r requirements.txt
 ```
+To install PyTorch with CUDA, refer to [PyTorch](https://pytorch.org/get-started/locally/) website for instructions.
 
 ## Usage
 
