@@ -10,11 +10,13 @@ class CSVDataset(Dataset):
     The class is initiated with the CSV data path, list of columns
     corresponding to inputs and list of columns corresponding to outputs.
     Optional header input to skip rows'''
-    def __init__(self, csv_file, input_col, output_col, header=1):
-        load_data = np.loadtxt(csv_file, delimiter=',', skiprows=header)
-        self.data = Variable(torch.from_numpy(load_data).float(), requires_grad=True)
-        self.input_data = self.data[:, input_col]
-        self.output_data = self.data[:, output_col]
+    def __init__(self, csv_file, input_col, output_col,
+                 header=1, device='cuda'):
+        self.data = np.loadtxt(csv_file, delimiter=',', skiprows=header)
+        self.input_data = Variable(torch.from_numpy(self.data[:, input_col]).float(),
+                                   requires_grad=True).to(device)
+        self.output_data = Variable(torch.from_numpy(self.data[:, output_col]).float(),
+                                    requires_grad=True).to(device)
     
     def __len__(self):
         return self.data.shape[0]
