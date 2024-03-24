@@ -1,8 +1,8 @@
 import argparse
-from datetime import datetime
 import torch
 from torch import nn, optim
 from torch.utils.data import DataLoader
+from datetime import datetime
 
 from dataloader import CSVDataset
 from fcn import FCN
