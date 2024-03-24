@@ -9,10 +9,16 @@ from fcn import FCN
 from models import heatEqRes, boundaryLoss
 
 
-def train(train_source, input_col, output_col, source_term, n_bc, neumann_bound,
-          neumann_val, dirichlet_bound, dirichlet_val,
-          num_epoch, batch_size, learning_rate, decay_rate, weight, 
-          net_arch, device, save_mod=True):
+def train(train_source, input_col, output_col, source_term):
+    
+    n_bc, neumann_bound, neumann_val, dirichlet_bound, dirichlet_val,\
+        num_epoch, batch_size, learning_rate, decay_rate, weight, net_arch, \
+        device, save_mod = opt.bc, opt.neu_bound, opt.neu_val, opt.dir_bound, \
+        opt.dir_val, opt.iter, opt.batch_size, opt.lr, opt.decay_r, \
+        opt.w_loss, opt.net_arch, opt.device, opt.save
+    
+    # load device
+    device = torch.device(device)
     
     # load the dataset into a dataloader
     train_dataset = CSVDataset(train_source, input_col, output_col, device=device)
@@ -69,8 +75,8 @@ def train(train_source, input_col, output_col, source_term, n_bc, neumann_bound,
     
     if save_mod:
         date = datetime.now()
-        torch.save(tempNet, f'tempFieldNet_{date.strftime('%Y%m%d_%H%M')}.pt')
-        torch.save(condNet, f'condFieldNet_{date.strftime('%Y%m%d_%H%M')}.pt')
+        torch.save(tempNet, f'model/tempFieldNet_{date.strftime('%Y%m%d_%H%M')}.pt')
+        torch.save(condNet, f'model/condFieldNet_{date.strftime('%Y%m%d_%H%M')}.pt')
 
 
 
@@ -80,7 +86,7 @@ if __name__ == '__main__':
     parser.add_argument('--in_col', nargs='+', type=int, help='specify the input data columns, required', required=True)
     parser.add_argument('--out_col', nargs='+', type=int, help='specify the output data columns, required', required=True)
     parser.add_argument('--source_term', type=float, default=1, help='the source term q value (default 1)')
-    parser.add_argument('--n_bc', type=int, default=25, help='number of points per boundary (default 25)')
+    parser.add_argument('--bc', type=int, default=25, help='number of points per boundary (default 25)')
     parser.add_argument('--neu_bound', nargs='+', default=['l','t','r'] , help='Specify the location of Neumann boundary on a square (default [l, t, r] - left, top, right)')
     parser.add_argument('--neu_val', type=float, default=0, help='Specify the Neumann boundary value, (default 0)')
     parser.add_argument('--dir_bound', nargs='+', default=['b'] , help='Specify the location of Neumann boundary on a square (default [b] - bottom)')
@@ -95,7 +101,4 @@ if __name__ == '__main__':
     parser.add_argument('--save', action='store_true', help='save results to folder (default False)')
     opt = parser.parse_args()
     
-    train(opt.train_data, opt.in_col, opt.out_col, opt.source_term, opt.n_bc,
-          opt.neu_bound, opt.neu_val, opt.dir_bound, opt.dir_val, opt.iter,
-          opt.batch_size, opt.lr, opt.decay_r, opt.w_loss, opt.net_arch,
-          opt.device, opt.save)
+    train(opt.train_data, opt.in_col, opt.out_col, opt.source_term)

@@ -12,7 +12,7 @@ def calc_grad(outputs, inputs):
                          retain_graph=True)[0]
 
 
-def surface_plot_vec(x, y, surf_data, title):
+def surface_plot_vec(x, y, surf_data, title, save=''):
     '''Plot a 2D surface plot from vector data x, y, surf_data'''
     fig = plt.figure()
     ax = fig.add_subplot()
@@ -20,3 +20,6 @@ def surface_plot_vec(x, y, surf_data, title):
     fig.colorbar(surf)
     plt.title(title)
     plt.show()
+    
+    if save:
+        fig.savefig(f'figures/{save}.png')
