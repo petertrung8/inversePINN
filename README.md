@@ -6,7 +6,7 @@ $-\nabla \cdot h(x,y)\nabla T = q$
 
 where the thermal conductivity $h(x,y)$ is spatially varying and an unknown term that is being identified.
 
-More details are on the implementation are included in the `report.pdf`
+More details are on the implementation are included in the `inversePINNreport.pdf`
 
 ## Installation
 
