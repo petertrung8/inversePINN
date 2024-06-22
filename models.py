@@ -26,8 +26,9 @@ class boundaryLoss():
     def __init__(self, neumann_bound, dirichlet_bound, n_bc,
                  neu_val=0, dir_val=0):
         if neumann_bound:
+            self.n_bound = neumann_bound
             self.NeuBC = True
-            self.x_Neu, self.y_Neu = self.boundarySquare(neumann_bound, n_bc)
+            self.x_Neu, self.y_Neu = self.boundarySquare(self.n_bound, n_bc)
             self.neu_Value = neu_val
         if dirichlet_bound:
             self.DirBC = True
@@ -75,15 +76,28 @@ class boundaryLoss():
     
     
     def neumannLoss(self, x, y, bc_val, model):
-        T_n = model(torch.cat([x,y], axis=1))
-        dT_n =torch.cat([calc_grad(T_n, x), calc_grad(T_n, y)])
-        neum = torch.zeros_like(dT_n)
+        idx_y = torch.zeros_like(y)
+        idx_x = torch.zeros_like(x)
+        if ('t' in self.n_bound) or ('b' in self.n_bound):
+            idx_y = torch.where(y == 1, 1.0, 0.0) + torch.where(y == 0, 1.0, 0.0)
+        if ('r' in self.n_bound) or ('l' in self.n_bound):
+            idx_x = torch.where(x == 1, 1.0, 0.0) + torch.where(x == 0, 1.0, 0.0)
+        idx_x = idx_x > 0
+        idx_y = idx_y > 0
+        x_x = x[idx_x]
+        y_x = y[idx_x]
+        x_y = x[idx_y]
+        y_y = y[idx_y]
+        T_n_x = model(torch.cat([x_x,y_x], axis=1))
+        T_n_y = model(torch.cat([x_y,y_y], axis=1))
+        dT_n =torch.cat([calc_grad(T_n_x, x_x), calc_grad(T_n_y, y_y)])
+        neum = torch.ones_like(dT_n)*bc_val
         return dT_n, neum
 
     def __call__(self, model, loss_f):
         T_d, diric = self.dirichletLoss(self.x_Dir, self.y_Dir,
                                         self.dir_Value, model)
         dT_n, neum = self.neumannLoss(self.x_Neu, self.y_Neu,
-                                      self.dir_Value, model)
+                                      self.neu_Value, model)
         return loss_f(torch.cat([T_d, dT_n], axis=0),
                       torch.cat([diric, neum], axis=0))

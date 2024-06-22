@@ -7,7 +7,7 @@ from utils import surface_plot_vec
 device = torch.device("cuda:0" if torch.cuda.is_available() else "cpu")
 
 parser = argparse.ArgumentParser()
-parser.add_argument('-e','--exact', type=str, default = "1+6*x**2+x/(1+2*y**2)", help='Change the equation of thermal conductivity (default 1+6*x**2+x/(1+2*y**2))')
+parser.add_argument('-e','--exact', type=str, default = "(1-x**2-y**2)/4", help='Change the equation of thermal conductivity (default 1+6*x**2+x/(1+2*y**2))')
 opt = parser.parse_args() 
 
 

@@ -6,7 +6,7 @@ $-\nabla \cdot h(x,y)\nabla T = q$
 
 where the thermal conductivity $h(x,y)$ is spatially varying and an unknown term that is being identified.
 
-More details are on the implementation are included in the `inversePINNreport.pdf`
+More details are on the implementation are included in the `inversePINNreport.pdf`. Some of the dataset, figures and writing have been modified or removed due to the privacy policy of the dataset used.
 
 ## Installation
 
@@ -29,7 +29,7 @@ To visualize the inference results from the function, run this command:
 ``` bash
 python plotting_result.py
 ```
-By default the exact solution of $h(x,y)$ is set to $1 + 6x^2 + \frac{x}{1+2y^2}$ but the exact solution can be changed using `--exact` options, for example to input exact solution as $h(x,y)=x+y$, the command would be as follows:
+By default the exact solution of $h(x,y)$ is set to $\frac{1-x^2-y^2}{4}$ but the exact solution can be changed using `--exact` options, for example to input exact solution as $h(x,y)=x+y$, the command would be as follows:
 ``` bash
 python plotting_result.py --exact x+y
 ```
